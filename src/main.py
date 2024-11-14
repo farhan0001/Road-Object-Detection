@@ -5,6 +5,14 @@ from tkinter import ttk
 from tkinter.messagebox import showinfo
 import random
 import os
+import sys
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS2
+    except Exception:
+        base_path = os.path.abspath('.')
+    return os.path.join(base_path, relative_path)
 
 def resize_window(width,height):
     screen_width = window.winfo_screenwidth()
@@ -26,8 +34,8 @@ def runDetectionAlgo():
             video_name = "two_wheeler_1"
         else:
             video_name = "pedestrian_" + str(random.randint(1,2))
-        cap = cv.VideoCapture('../assets/Video Files/' + video_name + '.mp4')
-        classifier = cv.CascadeClassifier('../assets/Trained XML Files/' + selection.replace(" ","_") + '.xml')
+        cap = cv.VideoCapture(resource_path('assets\\Video Files\\' + video_name + '.mp4'))
+        classifier = cv.CascadeClassifier(resource_path('assets\\Trained XML Files\\' + selection.replace(" ","_") + '.xml'))
         
         while cap.isOpened():
             ret,frame = cap.read()
@@ -51,7 +59,7 @@ def runDetectionAlgo():
 window = tk.Tk()
 window.title('Road Object Detection')
 resize_window(400,200)
-window.wm_iconbitmap('../assets/Logo/Detection.ico')
+window.wm_iconbitmap(resource_path('assets\\Logo\\Detection.ico'))
 window.resizable(False,False)
 window.configure(bg="#53868B")
 
@@ -60,9 +68,9 @@ heading.pack(side="top", pady=(20,10))
 
 normal_font = tkFont.Font(family="Arial",size=10,weight=tkFont.NORMAL)
 
-detection_algo_list = os.listdir('../assets/Trained XML Files/')
+detection_algo_list = os.listdir(resource_path('assets\\Trained XML Files\\'))
 categories_name = ['Cars','Bus','Two Wheeler','Pedestrian']
-video_list = os.listdir('../assets/Video Files/')
+video_list = os.listdir(resource_path('assets\\Video Files\\'))
 
 category_selected = tk.StringVar(value="Please Select a Category")
 
